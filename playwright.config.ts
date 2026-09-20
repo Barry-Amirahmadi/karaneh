@@ -21,7 +21,16 @@ import { defineConfig, devices } from "@playwright/test";
  */
 const raw = process.env.SMOKE_BASE_PATH ?? "/karaneh";
 const BASE_PATH = raw === "/" ? "" : raw.replace(/\/+$/, "");
-const PORT = 4321;
+/**
+ * The preview port.
+ *
+ * Not the template's 4321. This site is one of several built from the same
+ * template on the same machine, and a hardcoded port means the second one to
+ * run its smoke suite dies on `EADDRINUSE` — which reads like a broken test
+ * run rather than like two servers wanting the same socket. `SMOKE_PORT`
+ * overrides it when even this one is taken.
+ */
+const PORT = Number(process.env.SMOKE_PORT ?? 4325);
 
 export default defineConfig({
   testDir: "./tests",

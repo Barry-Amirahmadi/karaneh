@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1080" viewBox="0 0 1440 1080" role="img">
+  <defs>
+    <linearGradient id="open" x1="0" y1="0" x2="0.2" y2="1">
+      <stop offset="0%" stop-color="#dbdfde" stop-opacity="0.96"/>
+      <stop offset="100%" stop-color="#dbdfde" stop-opacity="0.55"/>
+    </linearGradient>
+    <radialGradient id="vig" cx="74%" cy="18%" r="96%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.16"/>
+      <stop offset="55%" stop-color="#FFFFFF" stop-opacity="0.02"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.24"/>
+    </radialGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="48.6"/>
+    </filter>
+    <filter id="grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="43" result="n"/>
+      <feColorMatrix type="saturate" values="0" in="n" result="g"/>
+      <feComponentTransfer in="g" result="gt">
+        <feFuncA type="linear" slope="0.38"/>
+      </feComponentTransfer>
+      <feBlend in="SourceGraphic" in2="gt" mode="overlay"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#grain)">
+    <rect width="1440" height="1080" fill="#1B1C1E"/>
+
+    <rect width="1440.0" height="827.4" fill="#2f3233"/>
+    <rect y="827.4" width="1440.0" height="252.6" fill="#3f4545"/>
+
+    <rect x="115.2" y="129.8" width="1238.4" height="161.5" fill="url(#open)"/>
+    <g filter="url(#soft)">
+      <polygon points="115.2,291.3 1353.6,291.3 892.8,1080.0 -144.0,1080.0"
+               fill="#FFFFFF" opacity="0.12"/>
+    </g>
+
+    <rect x="432.0" y="323.7" width="5.8" height="503.7" fill="#0f0f11" opacity="0.4"/>
+    <rect x="633.6" y="323.7" width="5.8" height="503.7" fill="#0f0f11" opacity="0.4"/>
+    <rect x="835.2" y="323.7" width="5.8" height="503.7" fill="#0f0f11" opacity="0.4"/>
+
+    <rect x="57.6" y="643.5" width="979.2" height="184.0" fill="#7E8C88"/>
+    <rect x="57.6" y="643.5" width="979.2" height="15.1" fill="#FFFFFF" opacity="0.22"/>
+    <rect x="57.6" y="805.8" width="979.2" height="21.6" fill="#0f0f11" opacity="0.38"/>
+    <rect width="1440" height="1080" fill="url(#vig)"/>
+  </g>
+</svg>

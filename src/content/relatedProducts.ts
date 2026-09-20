@@ -1,20 +1,20 @@
 import type { ResolvedProduct } from "@/types/content";
 
 /**
- * What to show at the bottom of a product page.
+ * What to show at the bottom of a project page.
  *
- * With five products in five distinct categories, "related" has no real
- * relation to express yet — so the honest thing is a rule that *would* express
- * one as the catalogue grows, and a heading that does not overclaim in the
- * meantime (the section is titled «ادامهٔ مجموعه», not «محصولات مرتبط»).
+ * Nine projects across three categories, so unlike the template this came from
+ * — five products in five distinct categories, where the category preference
+ * was inert — the rule genuinely fires: every project has two siblings, and
+ * every page fills both slots from its own category. The heading says
+ * «پروژه‌های هم‌دسته», which is exactly what the rule delivers and no more.
  *
  * The rule, in order:
  *
- * 1. Start reading from the product *after* this one and wrap around, so each
- *    page shows a different pair. Taking the first two of the list every time
- *    would make four of the five pages recommend the same two products.
- * 2. Prefer the same category. Inert today — no category has a second member —
- *    and the first thing that starts working when one does.
+ * 1. Start reading from the project *after* this one and wrap around, so each
+ *    page shows a different pair rather than the first two of the list.
+ * 2. Prefer the same category, then fall back to sequence so the block is
+ *    never short even if an editor leaves a category with a single member.
  */
 export function relatedProducts(
   product: ResolvedProduct,

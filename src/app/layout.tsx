@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Markazi_Text, Vazirmatn } from "next/font/google";
+import { IBM_Plex_Sans_Arabic, Noto_Kufi_Arabic } from "next/font/google";
 import { site } from "@/content/site";
 import { ui } from "@/content/ui";
 import { organizationSchema } from "@/content/schema";
@@ -15,35 +15,38 @@ import "./globals.css";
  * Iranian users: no third-party font request to be slow or blocked, and no
  * layout shift while a webfont negotiates.
  *
- * Markazi Text — Persian Naskh with calligraphic contrast. Display only.
- * Vazirmatn    — neutral Persian sans. Everything else.
+ * Noto Kufi Arabic     — geometric Kufi. Display only. Chosen because this
+ *                        trade draws straight lines for a living and a
+ *                        calligraphic Naskh would argue with its own subject.
+ * IBM Plex Sans Arabic  — neutral Persian sans with a technical register.
+ *                        Everything else.
  *
- * **Both subsets on both faces. Do not "optimise" Markazi down to `arabic`** —
- * that was tried in Phase 04 and measured, and it makes the page slower.
+ * **Both subsets on both faces. Do not "optimise" the display face down to
+ * `arabic`.** Nothing on this site sets Latin in the display face — the Latin
+ * half of the wordmark and every micro-label are `.t-label`, which is
+ * `--font-body` — so dropping the subset looks free. It is not: Google splits
+ * these faces by unicode range, and the `arabic` subset does not contain
+ * `U+0020`. The space character, the em-dash and the rest of general
+ * punctuation live in `latin`, and every Persian heading on the site has
+ * spaces in it, so the browser downloads that file either way. Dropping the
+ * subset only removes its `<link rel="preload">`, turning an early parallel
+ * fetch into one discovered after layout — the same bytes, arriving late
+ * enough to swap the largest type on the page.
  *
- * The reasoning that suggests it is sound and wrong: nothing on this site sets
- * Latin in the display face, because the Latin half of the wordmark and every
- * micro-label are `.t-label`, which is `--font-body`. Walking all six routes
- * for an element computing to Markazi with Latin text in it finds none.
- *
- * But Google splits these faces by unicode range, and Markazi's `arabic` subset
- * covers `U+0600-06FF` and friends — **it does not contain `U+0020`**. The space
- * character, the em-dash and the rest of general punctuation live in the `latin`
- * subset. Every Persian heading on the site has spaces in it, so the browser
- * downloads that file either way. Dropping the subset only removes its
- * `<link rel="preload">`, turning an early parallel fetch into a late one
- * discovered after layout — the same bytes, arriving in time to cause a visible
- * swap on the largest type on the page.
+ * The body face has no variable axis on Google Fonts, so its weights are
+ * requested explicitly. 400 and 500 are the only two the stylesheets use;
+ * asking for the full 100–700 range would ship five families nothing sets.
  */
-const markazi = Markazi_Text({
+const kufi = Noto_Kufi_Arabic({
   subsets: ["arabic", "latin"],
-  variable: "--font-markazi",
+  variable: "--font-kufi",
   display: "swap",
 });
 
-const vazirmatn = Vazirmatn({
+const plex = IBM_Plex_Sans_Arabic({
   subsets: ["arabic", "latin"],
-  variable: "--font-vazir",
+  weight: ["400", "500"],
+  variable: "--font-plex",
   display: "swap",
 });
 
@@ -63,10 +66,24 @@ export const metadata: Metadata = {
     template: site.seo.titleTemplate,
   },
   description: site.seo.description,
+
+  /**
+   * This deployment is a demonstration shown to one prospective client at a
+   * time, not a studio's website. Its copy describes a studio that does not
+   * exist, at an address that is not theirs, and having it rank for the
+   * brand's name — or, worse, for «معماری داخلی تهران» — would put invented
+   * text in front of people looking for a real one.
+   *
+   * `noindex` here, on every page, is the half that works: `robots.txt` on a
+   * GitHub Pages project site is served under the repository path where no
+   * crawler looks for it, so the meta tag is what actually carries the
+   * instruction. Remove both when a real client takes the site over.
+   */
+  robots: { index: false, follow: false },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#eae9e3",
+  themeColor: "#efefed",
   colorScheme: "light",
 };
 
@@ -75,7 +92,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html
       lang="fa"
       dir="rtl"
-      className={`${vazirmatn.variable} ${markazi.variable}`}
+      className={`${plex.variable} ${kufi.variable}`}
       /* The inline script below stamps data-js before React hydrates; that is
          the point of it, so the resulting attribute difference is expected. */
       suppressHydrationWarning

@@ -9,20 +9,24 @@ import { EditorialImage } from "@/components/ui/EditorialImage";
 import { ToneSwatch } from "@/components/ui/ToneSwatch";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Button } from "@/components/ui/Button";
+import { ProjectViews } from "./ProjectViews";
 
 /**
- * Product opener.
+ * Project opener.
  *
- * The one page on the site where the ambient shade has nothing to decide: a
- * single product is on screen, so the field simply holds that product's tone
+ * The one page on the site where the ambient light has nothing to decide: a
+ * single project is on screen, so the field simply holds that project's tone
  * for the whole section. §50's hover-or-scroll rule exists to arbitrate between
- * several products competing for the field — with one, there is no competition,
+ * several projects competing for the field — with one, there is no competition,
  * and the wash becomes what it always wanted to be here, the page's own colour.
  *
  * The photograph sits at the start edge, where a Persian reader begins, and the
  * copy across the gutter — the `tall` arrangement from the showcase, at hero
  * scale. On a phone that stacks to image-then-copy, which is the right order
- * for a page whose subject is the object itself.
+ * for a page whose subject is the space itself.
+ *
+ * The additional views hang directly off the primary image rather than getting
+ * a band of their own, because they are the same photograph's siblings.
  */
 export function ProductHero({ product }: { product: ResolvedProduct }) {
   const message = fillTemplate(inquiry.message, { product: product.name });
@@ -49,7 +53,7 @@ export function ProductHero({ product }: { product: ResolvedProduct }) {
                 </Link>
               </li>
               <li aria-hidden="true">·</li>
-              <li aria-current="page" className="crumb text-[var(--color-chalk)]">
+              <li aria-current="page" className="crumb text-[var(--color-noor)]">
                 {product.name}
               </li>
             </ol>
@@ -62,6 +66,10 @@ export function ProductHero({ product }: { product: ResolvedProduct }) {
                 sizes="(max-width: 1024px) 100vw, 48vw"
                 priority
               />
+              {/* Directly under the primary, not in a section of its own: these
+                  are the same photograph's siblings, and putting a heading
+                  between them would make them read as a second gallery. */}
+              <ProjectViews product={product} />
             </div>
 
             {/* Six columns at `lg`, five from `xl`. At 1024 the five-column

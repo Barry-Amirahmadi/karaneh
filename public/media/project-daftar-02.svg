@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1080" viewBox="0 0 1440 1080" role="img">
+  <defs>
+    <linearGradient id="open" x1="0" y1="0" x2="0.2" y2="1">
+      <stop offset="0%" stop-color="#d6d8d9" stop-opacity="0.96"/>
+      <stop offset="100%" stop-color="#d6d8d9" stop-opacity="0.55"/>
+    </linearGradient>
+    <radialGradient id="vig" cx="74%" cy="18%" r="96%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.16"/>
+      <stop offset="55%" stop-color="#FFFFFF" stop-opacity="0.02"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.24"/>
+    </radialGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="48.6"/>
+    </filter>
+    <filter id="grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="30" result="n"/>
+      <feColorMatrix type="saturate" values="0" in="n" result="g"/>
+      <feComponentTransfer in="g" result="gt">
+        <feFuncA type="linear" slope="0.38"/>
+      </feComponentTransfer>
+      <feBlend in="SourceGraphic" in2="gt" mode="overlay"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#grain)">
+    <rect width="1440" height="1080" fill="#1B1C1E"/>
+
+    <rect width="718.1" height="1080.0" fill="#383a3c"/>
+    <rect x="718.1" width="721.9" height="1080.0" fill="#6B7378"/>
+
+    <rect x="695.0" width="46.1" height="1080.0" fill="#0f0f11" opacity="0.85"/>
+    <rect x="741.1" width="7.2" height="1080.0" fill="#FFFFFF" opacity="0.28"/>
+
+    <rect x="764.2" y="180.0" width="675.8" height="3.8" fill="#0f0f11" opacity="0.3"/>
+    <rect x="764.2" y="360.0" width="675.8" height="3.8" fill="#0f0f11" opacity="0.3"/>
+    <rect x="764.2" y="540.0" width="675.8" height="3.8" fill="#0f0f11" opacity="0.3"/>
+    <rect x="764.2" y="720.0" width="675.8" height="3.8" fill="#0f0f11" opacity="0.3"/>
+    <rect x="764.2" y="900.0" width="675.8" height="3.8" fill="#0f0f11" opacity="0.3"/>
+    <rect x="764.2" y="1080.0" width="675.8" height="3.8" fill="#0f0f11" opacity="0.3"/>
+
+    <g filter="url(#soft)">
+      <polygon points="1440.0,0 1440.0,540.0 144.0,1080.0 -288.0,1080.0 -288.0,0"
+               fill="#FFFFFF" opacity="0.1"/>
+    </g>
+    <rect y="950.4" width="1440.0" height="129.6" fill="#0f0f11" opacity="0.22" filter="url(#soft)"/>
+    <rect width="1440" height="1080" fill="url(#vig)"/>
+  </g>
+</svg>

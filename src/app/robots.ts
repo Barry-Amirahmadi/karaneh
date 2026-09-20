@@ -22,7 +22,18 @@ export const dynamic = "force-static";
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: [{ userAgent: "*", allow: basePathForRobots }],
+    /**
+     * Disallow everything while this is a demonstration. The site is a
+     * complete, working studio site whose studio is invented, and the one
+     * outcome nobody wants is it being found by someone searching for an
+     * interior architect.
+     *
+     * `basePathForRobots` still computes the path this deployment occupies, so
+     * turning the demo into a real client site is a one-word edit here —
+     * `disallow` back to `allow` — with the `robots` field in
+     * `src/app/layout.tsx` removed at the same time.
+     */
+    rules: [{ userAgent: "*", disallow: basePathForRobots }],
     sitemap: absoluteUrl("/sitemap.xml"),
   };
 }

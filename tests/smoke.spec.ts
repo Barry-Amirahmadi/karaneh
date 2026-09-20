@@ -20,6 +20,11 @@ import { test, expect, type Page } from "@playwright/test";
 const rawBase = process.env.SMOKE_BASE_PATH ?? "/karaneh";
 const BASE = rawBase === "/" ? "" : rawBase.replace(/\/+$/, "");
 
+/** Latin digits to Persian, so an expected count can be written as a number. */
+function toFa(n: number): string {
+  return String(n).replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[Number(d)]);
+}
+
 /** Persian digits back to a number, so a rendered count can be compared. */
 function fromFa(text: string): number {
   return Number(text.replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d))).replace(/\D/g, ""));
@@ -73,7 +78,7 @@ test("homepage renders, is RTL, and loads every asset", async ({ page }) => {
 
   await page.goto(`${BASE}/`);
 
-  await expect(page.locator("h1")).toHaveText("زیبایی، آهسته اتفاق می‌افتد");
+  await expect(page.locator("h1")).toHaveText("فضا را از چیزی می‌سازیم که هست");
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
   await expect(page.locator("html")).toHaveAttribute("lang", "fa");
 
@@ -132,15 +137,15 @@ test("gallery lightbox opens and closes", async ({ page }) => {
   await expect(dialog).toHaveJSProperty("open", false);
 });
 
-test("a product route survives a hard load under the base path", async ({ page }) => {
+test("a project route survives a hard load under the base path", async ({ page }) => {
   const { consoleErrors, failed } = watch(page);
 
   // Hard load, not a client-side navigation: this is the case that 404'd on the
   // dynamic route's RSC payload, and the case a static host has to get right.
-  const response = await page.goto(`${BASE}/products/shab/`);
+  const response = await page.goto(`${BASE}/products/darvazeh/`);
   expect(response?.status()).toBe(200);
 
-  await expect(page.locator("h1")).toHaveText("سرم شب");
+  await expect(page.locator("h1")).toHaveText("خانهٔ دروازه");
 
   // Regression: a raw <a href="/"> skips basePath and leaves the site entirely.
   const homeLink = page.locator('nav[aria-label="مسیر صفحه"] a').first();
@@ -151,17 +156,76 @@ test("a product route survives a hard load under the base path", async ({ page }
   const inquiry = page.locator('a[href^="https://wa.me/"]');
   const inquiryHref = await inquiry.getAttribute("href");
   expect(inquiryHref, "WhatsApp inquiry link").toBeTruthy();
-  expect(decodeURIComponent(inquiryHref!), "product name prefilled").toContain("سرم شب");
+  expect(decodeURIComponent(inquiryHref!), "project name prefilled").toContain("خانهٔ دروازه");
   expect(inquiryHref!, "digits only in the wa.me path").toMatch(/^https:\/\/wa\.me\/\d+\?text=/);
   await expect(inquiry).toHaveAttribute("rel", /noopener/);
 
-  // Related products must lead somewhere else — a page linking to itself here
+  // Related projects must lead somewhere else — a page linking to itself here
   // is the failure mode of every naive "related" implementation.
   const relatedLinks = await page
     .locator('section[aria-labelledby="related-heading"] article a[href]')
     .evaluateAll((els) => els.map((el) => el.getAttribute("href") ?? ""));
   expect(relatedLinks.length).toBeGreaterThan(0);
-  expect(relatedLinks.some((href) => href.includes("/products/shab"))).toBe(false);
+  expect(relatedLinks.some((href) => href.includes("/products/darvazeh"))).toBe(false);
+
+  expect(failed, "failed requests").toEqual([]);
+  expect(consoleErrors, "console errors").toEqual([]);
+});
+
+/**
+ * The one component this site adds to the template it derives from, so it is
+ * the one component with no inherited regression history — these assertions
+ * come from what it has to be true for, not from what has already broken.
+ *
+ * A room needs more than one frame to be legible, which is the whole reason
+ * `views` exists. The failure that would matter is the strip and the enlarged
+ * set disagreeing about which image is which: the thumbnail says «نمای ۲» and
+ * opens the third picture, or the counter reads «۱ از ۳» for something that is
+ * plainly not the first. Both are invisible unless something counts.
+ */
+test("a project's extra views open the frame their label names", async ({ page }) => {
+  const { consoleErrors, failed } = watch(page);
+
+  await page.goto(`${BASE}/products/darvazeh/`);
+
+  const thumbs = page.locator(".view-strip button.view-thumb");
+  // Two extra views in the content for this project; the enlarged set is those
+  // plus the primary image above the strip.
+  await expect(thumbs, "one thumbnail per extra view").toHaveCount(2);
+  const total = (await thumbs.count()) + 1;
+
+  const dialog = page.locator("dialog.lightbox");
+
+  for (let i = 0; i < 2; i += 1) {
+    await thumbs.nth(i).scrollIntoViewIfNeeded();
+    await thumbs.nth(i).click();
+    await expect(dialog).toHaveJSProperty("open", true);
+
+    // The label and the counter have to agree. They are computed in two
+    // different components from two different indices, which is exactly the
+    // arrangement that drifts by one and stays plausible on screen.
+    const label = await thumbs.nth(i).getAttribute("aria-label");
+    expect(label, `thumbnail ${i} label`).toBeTruthy();
+    expect(fromFa(label!), `thumbnail ${i} names its position`).toBe(i + 2);
+    await expect(
+      dialog.locator("p.t-meta").first(),
+      `thumbnail ${i} counter`,
+    ).toHaveText(`${toFa(i + 2)} از ${toFa(total)}`);
+
+    // An enlarged photograph with no alt is the one image on the page a screen
+    // reader has no account of at all.
+    await expect(dialog.locator("img"), `view ${i + 2} alt`).toHaveAttribute("alt", /\S/);
+
+    await page.keyboard.press("Escape");
+    await expect(dialog).toHaveJSProperty("open", false);
+  }
+
+  expect(await namelessControls(page), "controls with no accessible name").toEqual([]);
+
+  const overflows = await page.evaluate(
+    () => document.documentElement.scrollWidth > window.innerWidth + 1,
+  );
+  expect(overflows, "horizontal overflow").toBe(false);
 
   expect(failed, "failed requests").toEqual([]);
   expect(consoleErrors, "console errors").toEqual([]);
@@ -173,13 +237,13 @@ test("the collection page lists the catalogue and its index resolves", async ({ 
   const response = await page.goto(`${BASE}/products/`);
   expect(response?.status()).toBe(200);
 
-  await expect(page.locator("h1")).toHaveText("همهٔ محصولات، کنار هم");
+  await expect(page.locator("h1")).toHaveText("همهٔ پروژه‌ها، کنار هم");
 
   // Regression: nav hrefs written as bare hashes pointed at homepage sections
   // and resolved to nothing once the header rendered on a second page.
   await expect(
     page.locator('header nav[aria-label="پیمایش اصلی"] a[aria-current="page"]'),
-  ).toHaveText("محصولات");
+  ).toHaveText("پروژه‌ها");
 
   // The index is only structure if its targets exist. A category anchor that
   // points at a removed product fails silently — the page just does not move.
@@ -229,7 +293,7 @@ test("the gallery page composes every plate and opens the right one", async ({ p
   const response = await page.goto(`${BASE}/gallery/`);
   expect(response?.status()).toBe(200);
 
-  await expect(page.locator("h1")).toHaveText("تصویرها، بی‌عجله");
+  await expect(page.locator("h1")).toHaveText("نگاه نزدیک");
   await expect(
     page.locator('header nav[aria-label="پیمایش اصلی"] a[aria-current="page"]'),
   ).toHaveText("گالری");
@@ -249,7 +313,7 @@ test("the gallery page composes every plate and opens the right one", async ({ p
   await third.click();
   const dialog = page.locator("dialog.lightbox");
   await expect(dialog).toHaveJSProperty("open", true);
-  await expect(dialog.locator(".t-h3")).toHaveText("سرم شب");
+  await expect(dialog.locator(".t-h3")).toHaveText("بندکشی مرمت‌شده");
 
   await page.keyboard.press("Escape");
   await expect(dialog).toHaveJSProperty("open", false);
@@ -275,7 +339,7 @@ test("the about page owns the contact anchor and both inquiry paths", async ({ p
 
   const response = await page.goto(`${BASE}/about/`);
   expect(response?.status()).toBe(200);
-  await expect(page.locator("h1")).toHaveText("چرا مجموعه کوچک است");
+  await expect(page.locator("h1")).toHaveText("کار روی بنای موجود");
 
   // Exactly one #contact. The footer carried this id through Phase 01 and the
   // footer renders on this page too — two of them is a silent duplicate-id
@@ -315,8 +379,8 @@ test("every route carries its own metadata, under the deployed base path", async
     "/products/",
     "/gallery/",
     "/about/",
-    "/products/shab/",
-    "/products/aram/",
+    "/products/darvazeh/",
+    "/products/kafe/",
   ];
 
   const seen = new Map<string, string[]>();
@@ -376,10 +440,11 @@ test("the sitemap and robots.txt are exported and absolute", async ({ page }) =>
 
   // Every exported route must be listed, and every entry absolute — a relative
   // <loc> is invalid in a sitemap and is dropped silently.
-  for (const route of ["/", "/products/", "/gallery/", "/about/", "/products/shab/"]) {
+  for (const route of ["/", "/products/", "/gallery/", "/about/", "/products/darvazeh/"]) {
     expect(xml, `sitemap lists ${route}`).toContain(`${BASE}${route}</loc>`);
   }
-  expect(xml.match(/<loc>/g)?.length, "sitemap entry count").toBe(9);
+  // Four static routes plus nine projects.
+  expect(xml.match(/<loc>/g)?.length, "sitemap entry count").toBe(13);
   expect(xml, "no relative loc").not.toMatch(/<loc>\//);
 
   // Drafts are filtered out of publishedProducts and must not be advertised.
@@ -393,7 +458,7 @@ test("the sitemap and robots.txt are exported and absolute", async ({ page }) =>
 });
 
 test("structured data parses and claims nothing invented", async ({ page }) => {
-  await page.goto(`${BASE}/products/shab/`);
+  await page.goto(`${BASE}/products/darvazeh/`);
 
   const blocks = await page
     .locator('script[type="application/ld+json"]')
@@ -404,8 +469,8 @@ test("structured data parses and claims nothing invented", async ({ page }) => {
   const product = parsed.find((p) => p["@type"] === "Product")!;
   const organization = parsed.find((p) => p["@type"] === "Organization")!;
 
-  expect(product.name).toBe("سرم شب");
-  expect(String(product.url)).toContain(`${BASE}/products/shab/`);
+  expect(product.name).toBe("خانهٔ دروازه");
+  expect(String(product.url)).toContain(`${BASE}/products/darvazeh/`);
 
   // The point of the schema file: it must stay a mapping of data that exists.
   // `offers` and a rating are what a generator would invent to earn a rich
@@ -486,7 +551,7 @@ test("an unknown path serves the styled 404", async ({ page }) => {
  * backend, so this asserts the site has no form that resolves to neither.
  */
 test("no route carries a form that submits nowhere", async ({ page }) => {
-  const routes = ["/", "/products/", "/gallery/", "/about/", "/products/shab/"];
+  const routes = ["/", "/products/", "/gallery/", "/about/", "/products/darvazeh/"];
 
   for (const route of routes) {
     await page.goto(`${BASE}${route}`);

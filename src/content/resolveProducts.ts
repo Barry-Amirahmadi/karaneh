@@ -16,35 +16,40 @@ import type { Product, ProductLayout, ResolvedProduct } from "@/types/content";
 /**
  * Cycle order for an unset `layout`.
  *
- * MASTER-HANDOFF §48.2 prescribes `tall → wide → compact → feature`. That order
- * is not used verbatim, because it conflicts with a defect the same document
- * forbids reintroducing (§36.8, "incorrect product image-side alternation"):
- * `wide` and `compact` both sit on the left of the grid, so placing them
- * adjacently produces two left-hand images in a row — the exact rhythm problem
- * that was found and fixed in Phase 01.
+ * MASTER-HANDOFF §48.2 prescribes `tall → wide → compact → feature`, and that
+ * order is not used verbatim for two reasons.
  *
- * Moving `feature` between them keeps all four arrangements, keeps the cycle
- * length at four, and means no two neighbouring products ever share a side —
- * including across the wrap from the last back to the first:
+ * The first is inherited: `wide` and `compact` both sit on the left of the
+ * grid, so placing them adjacently produces two left-hand images in a row —
+ * the rhythm defect §36.8 forbids reintroducing. Interleaving `tall`, which
+ * sits on the right, is what keeps every neighbouring pair alternating,
+ * including across the wrap from the last item back to the first:
  *
- *   tall(right) → wide(left) → feature(full width) → compact(left) → tall(right) …
+ *   tall(right) → wide(left) → tall(right) → compact(left) → tall(right) …
+ *
+ * The second is this catalogue's own size. The template held five products and
+ * could afford `feature` inside a four-step cycle; nine projects cannot — a
+ * full-width row every fourth item would put two or three of them on one page
+ * and the emphasis would stop meaning anything. `feature` is an editorial
+ * decision about *one* project, so it stays something an editor sets by hand
+ * and the fallback never manufactures.
  *
  * The intent of §48.2 is a deterministic spread; this delivers that without
- * breaking §36.8.
+ * breaking §36.8 and without inventing emphasis nobody asked for.
  */
-const LAYOUT_CYCLE: readonly ProductLayout[] = ["tall", "wide", "feature", "compact"];
+const LAYOUT_CYCLE: readonly ProductLayout[] = ["tall", "wide", "tall", "compact"];
 
 /**
- * Shade for a product with no `tone`.
+ * Ambient light for a project with no `tone`.
  *
- * Deliberately a near-neutral deepening of the dark ground rather than an
- * invented colour: a product whose shade nobody chose should read as having no
- * particular atmosphere, not as having the wrong one. It also cannot reduce
- * text contrast, since it is darker than the ground it washes over.
+ * Deliberately a near-neutral step off the dark ground rather than an invented
+ * colour: a project whose light nobody chose should read as having no
+ * particular atmosphere, not as having the wrong one. It is close enough to
+ * `--color-zoghal` that it cannot meaningfully reduce text contrast over it.
  *
  * Kept in sync with the `@property --shade` initial-value in tokens.css.
  */
-export const FALLBACK_TONE = "#2A3550";
+export const FALLBACK_TONE = "#2C2E32";
 
 export function resolveProduct(product: Product, index: number): ResolvedProduct {
   return {

@@ -121,7 +121,7 @@ export function Footer() {
         {/* Colophon */}
         <div className="mt-14 flex flex-wrap items-end justify-between gap-6">
           <p
-            className="t-display leading-none text-[var(--color-chalk)] opacity-15"
+            className="t-display leading-none text-[var(--color-noor)] opacity-15"
             aria-hidden="true"
           >
             {site.brand.name}

@@ -9,7 +9,7 @@
  *
  * Deliberately zero-dependency — Node built-ins only.
  *
- *   node scripts/serve-static.mjs --port 4321 --base /karaneh
+ *   node scripts/serve-static.mjs --port 4325 --base /karaneh
  */
 import { createServer } from "node:http";
 import { readFile, stat } from "node:fs/promises";
@@ -26,7 +26,9 @@ const flag = (name, fallback) => {
   return i !== -1 && args[i + 1] ? args[i + 1] : fallback;
 };
 
-const port = Number(flag("port", "4321"));
+/* 4325, not the template's 4321: sibling sites built from the same template
+   run on the same machine and would otherwise fight for one socket. */
+const port = Number(flag("port", "4325"));
 let base = flag("base", "").replace(/\/+$/, "");
 
 // Git Bash on Windows rewrites a leading-slash argument into a native path

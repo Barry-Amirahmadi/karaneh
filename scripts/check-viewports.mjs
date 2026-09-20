@@ -12,7 +12,7 @@
  */
 import { chromium } from "@playwright/test";
 
-const PORT = process.env.PORT ?? "4321";
+const PORT = process.env.PORT ?? "4325";
 const args = process.argv.slice(2).filter((a) => !a.startsWith("--"));
 const reduced = process.argv.includes("--reduced");
 const path = args[0] ?? "/karaneh/products/";

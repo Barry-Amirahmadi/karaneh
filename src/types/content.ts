@@ -69,6 +69,25 @@ export interface Product {
    */
   tone?: string;
   image: MediaAsset;
+  /**
+   * Additional views of the same project, shown on the detail page only.
+   *
+   * `image` stays the required primary and nothing else reads this: every
+   * listing, card, related-project block and share card takes `image`, so a
+   * project with no `views` renders exactly as it did before the field
+   * existed. That is the whole point of adding it as an optional array beside
+   * the primary rather than turning `image` into `images[0]` — one change to
+   * the detail page, zero changes anywhere else.
+   *
+   * Interior architecture is the reason it exists at all. A cosmetic product
+   * is one object photographed once; a room is not comprehensible from a
+   * single frame, and a studio that showed one image per project would be
+   * making a claim about its work it could not support.
+   *
+   * Each view should be in the same `ratio` as the primary, for the reason the
+   * header comment of `products.ts` gives about a single catalogue frame.
+   */
+  views?: MediaAsset[];
   /** Optional for the same reason as `tone`. */
   layout?: ProductLayout;
   status: "published" | "draft";
@@ -310,6 +329,13 @@ export interface UiStrings {
     closeMenu: string;
     /** The mobile panel is a dialog and needs its own name. */
     menuDialog: string;
+  };
+  /** Names for the detail page's additional-views strip. */
+  views: {
+    /** Accessible name of the strip itself, which is a list of controls. */
+    label: string;
+    /** Each thumbnail's accessible name; `{n}` is its position, in Persian digits. */
+    open: string;
   };
   gallery: {
     lightbox: string;

@@ -1,35 +1,48 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1333" viewBox="0 0 1000 1333" role="img">
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1440" viewBox="0 0 1080 1440" role="img">
   <defs>
-    <radialGradient id="light" cx="78%" cy="18%" r="88%">
-      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.34"/>
-      <stop offset="52%" stop-color="#FFFFFF" stop-opacity="0.07"/>
-      <stop offset="100%" stop-color="#000000" stop-opacity="0.18"/>
-    </radialGradient>
-    <linearGradient id="fall" x1="1" y1="0" x2="0.1" y2="1">
-      <stop offset="0%" stop-color="#5F8A85" stop-opacity="0.92"/>
-      <stop offset="100%" stop-color="#5F8A85" stop-opacity="0.34"/>
+    <linearGradient id="open" x1="0" y1="0" x2="0.2" y2="1">
+      <stop offset="0%" stop-color="#efefed" stop-opacity="0.96"/>
+      <stop offset="100%" stop-color="#efefed" stop-opacity="0.55"/>
     </linearGradient>
+    <radialGradient id="vig" cx="74%" cy="18%" r="96%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.16"/>
+      <stop offset="55%" stop-color="#FFFFFF" stop-opacity="0.02"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.24"/>
+    </radialGradient>
     <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
-      <feGaussianBlur stdDeviation="130.0"/>
+      <feGaussianBlur stdDeviation="48.6"/>
     </filter>
     <filter id="grain" x="0" y="0" width="100%" height="100%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="13" result="n"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="79" result="n"/>
       <feColorMatrix type="saturate" values="0" in="n" result="g"/>
       <feComponentTransfer in="g" result="gt">
-        <feFuncA type="linear" slope="0.5"/>
+        <feFuncA type="linear" slope="0.38"/>
       </feComponentTransfer>
       <feBlend in="SourceGraphic" in2="gt" mode="overlay"/>
     </filter>
   </defs>
 
   <g filter="url(#grain)">
-    <rect width="1000" height="1333" fill="#DDDBD2"/>
-    <rect width="1000" height="1333" fill="url(#fall)" opacity="0.55"/>
+    <rect width="1080" height="1440" fill="#EFEFED"/>
+
+    <rect width="534.2" height="1440.0" fill="#e5e5e2"/>
+    <rect x="534.2" width="545.8" height="1440.0" fill="#8F8A80"/>
+
+    <rect x="516.9" width="34.6" height="1440.0" fill="#6f6e6a" opacity="0.85"/>
+    <rect x="551.5" width="5.4" height="1440.0" fill="#FFFFFF" opacity="0.28"/>
+
+    <rect x="568.8" y="240.0" width="511.2" height="5.0" fill="#6f6e6a" opacity="0.3"/>
+    <rect x="568.8" y="480.0" width="511.2" height="5.0" fill="#6f6e6a" opacity="0.3"/>
+    <rect x="568.8" y="720.0" width="511.2" height="5.0" fill="#6f6e6a" opacity="0.3"/>
+    <rect x="568.8" y="960.0" width="511.2" height="5.0" fill="#6f6e6a" opacity="0.3"/>
+    <rect x="568.8" y="1200.0" width="511.2" height="5.0" fill="#6f6e6a" opacity="0.3"/>
+    <rect x="568.8" y="1440.0" width="511.2" height="5.0" fill="#6f6e6a" opacity="0.3"/>
+
     <g filter="url(#soft)">
-      <ellipse cx="480" cy="720" rx="290" ry="371" fill="#5F8A85" opacity="0.85"/>
-      <ellipse cx="602" cy="549" rx="145" ry="126" fill="#FFFFFF" opacity="0.26"/>
-      <ellipse cx="300" cy="905" rx="203" ry="148" fill="#000000" opacity="0.2"/>
+      <polygon points="1080.0,0 1080.0,720.0 108.0,1440.0 -216.0,1440.0 -216.0,0"
+               fill="#FFFFFF" opacity="0.1"/>
     </g>
-    <rect width="1000" height="1333" fill="url(#light)"/>
+    <rect y="1267.2" width="1080.0" height="172.8" fill="#6f6e6a" opacity="0.22" filter="url(#soft)"/>
+    <rect width="1080" height="1440" fill="url(#vig)"/>
   </g>
 </svg>

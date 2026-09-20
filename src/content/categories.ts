@@ -6,10 +6,10 @@ import type { ResolvedProduct } from "@/types/content";
  * `category` already exists on every product as free Persian text, and that is
  * deliberately left alone here: inventing a parallel `categorySlug` field, a
  * category registry, or category landing routes would be building a taxonomy
- * system for a five-product catalog (MASTER-HANDOFF §40, §35). What the
- * collection page actually needs is an *index* — which categories exist, how
- * many products are in each, and where each one starts — and all three of
- * those can be read off the product list itself.
+ * system for a nine-project catalogue across three categories (MASTER-HANDOFF
+ * §40, §35). What the collection page actually needs is an *index* — which
+ * categories exist, how many projects are in each, and where each one starts —
+ * and all three of those can be read off the project list itself.
  *
  * The shape this returns is the same shape a real category system would expose,
  * so growing into one later is an implementation change behind these functions,
@@ -36,12 +36,13 @@ export function productAnchor(slug: string): string {
  * Categories in the order the editor's own sequence introduces them — never
  * alphabetical.
  *
- * The collection is not re-sorted into category blocks, because product order
- * is an editorial decision in this project (§28, §48.2): the sequence carries
- * the showcase rhythm, and re-grouping it here would mean the same product got
- * a different arrangement on the homepage than on the collection page whenever
- * an editor left `layout` unset. So the index reports the collection as it is
- * actually ordered, and each entry points at that category's first appearance.
+ * The list is not re-sorted into category blocks, because project order is an
+ * editorial decision (§28, §48.2): the sequence carries the showcase rhythm,
+ * and re-grouping it here would mean the same project got a different
+ * arrangement on the homepage than on the projects page whenever an editor left
+ * `layout` unset. The seed data is already authored in category runs — three
+ * residential, three commercial, three hospitality — so the index and the page
+ * agree without the page having to sort anything.
  */
 export function collectCategories(list: readonly ResolvedProduct[]): CategoryEntry[] {
   const entries = new Map<string, CategoryEntry>();

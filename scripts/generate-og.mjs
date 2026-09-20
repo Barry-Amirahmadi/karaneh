@@ -11,8 +11,8 @@
  * dependencies and adding `sharp` or `resvg` to draw one 1200×630 rectangle is
  * a bad trade. Node's own `zlib` is all a PNG encoder needs.
  *
- * The card is the same art direction as `generate-media.mjs` — sormeh ground,
- * a defocused tonal mass, light falling from the top-right, which is the RTL
+ * The card is the same art direction as `generate-media.mjs` — a wall plane, a
+ * floor plane, and a shaft of light falling from the top-right, which is the RTL
  * reading origin — with the brand mark from `src/app/icon.svg` over it. It
  * carries no type: rendering Persian into a generated raster needs a font
  * pipeline this project does not have, and a Latin-only card for a Persian
@@ -34,9 +34,10 @@ const W = 1200;
 const H = 630;
 
 /** Kept in sync with src/app/tokens.css and scripts/generate-media.mjs. */
-const SORMEH = [0x14, 0x1a, 0x2b];
-const TONE = [0x7f, 0xb3, 0xac];
-const CHALK = [0xea, 0xe9, 0xe3];
+const ZOGHAL = [0x12, 0x13, 0x14];
+const TONE = [0x8c, 0x7a, 0x63];
+const NOOR = [0xe8, 0xe8, 0xe6];
+const AAJOR = [0x9e, 0x5b, 0x3e];
 
 /* -------------------------------------------------------------------------- */
 /*  PNG encoding                                                              */
@@ -124,9 +125,20 @@ function over(dst, colour, alpha) {
   for (let i = 0; i < 3; i++) dst[i] = mix(dst[i], colour[i], alpha);
 }
 
-/** Coverage of a hard-edged circle, antialiased across one pixel. The mark only. */
-function disc(x, y, cx, cy, r) {
-  return 1 - smoothstep(r - 1, r + 1, Math.hypot(x - cx, y - cy));
+/**
+ * Coverage of an axis-aligned rectangle, antialiased across one pixel.
+ *
+ * The mark only. Its second plane recedes, so its top and bottom edges move
+ * with x — which is why this takes four edges rather than a position and a
+ * size: the caller passes the edges it has computed for *this* column.
+ */
+function band(x, y, x0, x1, y0, y1) {
+  return (
+    smoothstep(x0 - 1, x0 + 1, x) *
+    (1 - smoothstep(x1 - 1, x1 + 1, x)) *
+    smoothstep(y0 - 1, y0 + 1, y) *
+    (1 - smoothstep(y1 - 1, y1 + 1, y))
+  );
 }
 
 /**
@@ -167,9 +179,14 @@ const BAYER = [
 const rgb = Buffer.alloc(W * H * 3);
 const px = [0, 0, 0];
 
+/** Where the wall plane meets the floor plane. */
+const FLOOR_Y = 424;
+
 // The brand mark, from src/app/icon.svg: a 32-unit box scaled up and centred
-// slightly right of middle, so it sits under the light rather than opposite it.
-const MARK = { size: 400, cx: 620, cy: 315 };
+// slightly left of middle, so the shaft of light passes behind it rather than
+// through it. Every consumer crops this card differently, so it stays near
+// enough to the centre to survive a square crop.
+const MARK = { size: 320, cx: 560, cy: 300 };
 const scale = MARK.size / 32;
 const originX = MARK.cx - MARK.size / 2;
 const originY = MARK.cy - MARK.size / 2;
@@ -178,22 +195,39 @@ const markY = (v) => originY + v * scale;
 
 for (let y = 0; y < H; y++) {
   for (let x = 0; x < W; x++) {
-    px[0] = SORMEH[0];
-    px[1] = SORMEH[1];
-    px[2] = SORMEH[2];
+    px[0] = ZOGHAL[0];
+    px[1] = ZOGHAL[1];
+    px[2] = ZOGHAL[2];
 
-    // 1 — the tonal fall, top-right to bottom-left.
+    // 1 — the two planes. The floor takes more of the tone, which is what
+    // separates it from the wall without drawing a line to say so.
+    const onFloor = smoothstep(FLOOR_Y - 1, FLOOR_Y + 1, y);
+    over(px, TONE, mix(0.17, 0.36, onFloor));
+
+    // 2 — the tonal fall, top-right to bottom-left.
     const fall = clamp01((x / W) * 0.55 + (1 - y / H) * 0.45);
-    over(px, TONE, mix(0.34, 0.92, fall) * 0.55);
+    over(px, TONE, mix(0.02, 0.3, fall));
 
-    // 2 — the defocused mass, with its highlight and its shadow.
-    over(px, TONE, glow(x, y, 250, 470, 330) * 0.5);
-    over(px, [255, 255, 255], glow(x, y, 1010, 60, 380) * 0.16);
-    over(px, [0, 0, 0], glow(x, y, 120, 690, 330) * 0.24);
+    // 3 — the shaft. Its centre walks left as it descends and it widens as it
+    // goes, which is what a real one does; a constant-width diagonal reads as
+    // a painted stripe.
+    const shaftX = 980 + (y / H) * (300 - 980);
+    const shaftW = 150 + (y / H) * 170;
+    over(px, [255, 255, 255], 0.17 * Math.exp(-(((x - shaftX) / shaftW) ** 2)));
+    over(px, [0, 0, 0], 0.22 * glow(x, y, 90, 620, 300));
 
-    // 3 — the mark, the one crisp thing on the card.
-    over(px, TONE, disc(x, y, markX(19), markY(13), 7 * scale));
-    over(px, CHALK, disc(x, y, markX(12), markY(21), 4 * scale) * 0.85);
+    // 4 — the seam where the planes meet: a hairline, not an edge.
+    over(px, [0, 0, 0], 0.26 * Math.exp(-(((y - FLOOR_Y) / 2.4) ** 2)));
+
+    // 5 — the mark, the one crisp thing on the card. Its second plane recedes,
+    // so its edges are computed for this column rather than fixed.
+    const mu = (x - originX) / scale;
+    over(px, NOOR, band(x, y, markX(5), markX(15), markY(6), markY(26)) * 0.95);
+    over(
+      px,
+      AAJOR,
+      band(x, y, markX(18), markX(27), markY(9 - (mu - 18) / 3), markY(23 + (mu - 18) / 3)),
+    );
 
     // 4 — the light source at 78% / 18%, and the vignette that closes it.
     // Both smooth for the same reason as the masses above: the earlier version
@@ -202,8 +236,8 @@ for (let y = 0; y < H; y++) {
     const u = x / W - 0.78;
     const v = y / H - 0.18;
     const t = Math.hypot(u, v) / 0.88;
-    over(px, [255, 255, 255], 0.34 * Math.exp(-((t / 0.42) ** 2)));
-    over(px, [0, 0, 0], 0.18 * smoothstep(0.45, 1.2, t));
+    over(px, [255, 255, 255], 0.18 * Math.exp(-((t / 0.42) ** 2)));
+    over(px, [0, 0, 0], 0.22 * smoothstep(0.45, 1.2, t));
 
     const d = (BAYER[y & 3][x & 3] / 16 - 0.5) * 1.6;
 
