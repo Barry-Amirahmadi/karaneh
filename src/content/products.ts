@@ -54,22 +54,10 @@ export const products: Product[] = [
     ],
     tone: "#8C7A63",
     image: {
-      src: "/media/project-darvazeh.svg",
+      src: "/media/project-darvazeh.jpg",
       alt: "نشیمن خانهٔ دروازه، رو به حیاط، در نور بعدازظهر",
       ratio: "4/3",
     },
-    views: [
-      {
-        src: "/media/project-darvazeh-02.svg",
-        alt: "همان نشیمن از سمت پلکان، با حیاط در قاب در",
-        ratio: "4/3",
-      },
-      {
-        src: "/media/project-darvazeh-03.svg",
-        alt: "جدارهٔ آشپزخانه و پیوستگی کف تا حیاط",
-        ratio: "4/3",
-      },
-    ],
     layout: "tall",
     status: "published",
   },
@@ -95,22 +83,10 @@ export const products: Product[] = [
     ],
     tone: "#B7B4AC",
     image: {
-      src: "/media/project-sepid.svg",
+      src: "/media/project-sepid.jpg",
       alt: "نشیمن آپارتمان سپید با کمدهای تا سقف هم‌رنگ دیوار",
       ratio: "4/3",
     },
-    views: [
-      {
-        src: "/media/project-sepid-02.svg",
-        alt: "راهروی آپارتمان سپید و بازتاب نور روی سقف",
-        ratio: "4/3",
-      },
-      {
-        src: "/media/project-sepid-03.svg",
-        alt: "کف تیره در برابر جداره‌های روشن",
-        ratio: "4/3",
-      },
-    ],
     layout: "wide",
     status: "published",
   },
@@ -136,22 +112,10 @@ export const products: Product[] = [
     ],
     tone: "#6E5B47",
     image: {
-      src: "/media/project-baam.svg",
+      src: "/media/project-baam.jpg",
       alt: "نشیمن زیر خرپای چوبی باز، با پنجرهٔ سقفی",
       ratio: "4/3",
     },
-    views: [
-      {
-        src: "/media/project-baam-02.svg",
-        alt: "جزئیات اتصال خرپای قدیمی به جدارهٔ صاف تازه",
-        ratio: "4/3",
-      },
-      {
-        src: "/media/project-baam-03.svg",
-        alt: "پلهٔ نیم‌طبقه در نور پنجرهٔ سقفی",
-        ratio: "4/3",
-      },
-    ],
     layout: "tall",
     status: "published",
   },
@@ -177,22 +141,10 @@ export const products: Product[] = [
     ],
     tone: "#6B7378",
     image: {
-      src: "/media/project-daftar.svg",
+      src: "/media/project-daftar.jpg",
       alt: "فضای کار باز میان ستون‌های بتنی، با قفسه‌های کم‌ارتفاع",
       ratio: "4/3",
     },
-    views: [
-      {
-        src: "/media/project-daftar-02.svg",
-        alt: "نشیمن گفت‌وگو زیر سقف آکوستیک پایین‌آمده",
-        ratio: "4/3",
-      },
-      {
-        src: "/media/project-daftar-03.svg",
-        alt: "اتاق جلسه در جدارهٔ بی‌پنجره",
-        ratio: "4/3",
-      },
-    ],
     layout: "compact",
     status: "published",
   },
@@ -218,22 +170,10 @@ export const products: Product[] = [
     ],
     tone: "#8F8A80",
     image: {
-      src: "/media/project-showroom.svg",
+      src: "/media/project-showroom.jpg",
       alt: "جدارهٔ نمایش سنگ زیر نور زاویه‌دار ریل سقفی",
       ratio: "4/3",
     },
-    views: [
-      {
-        src: "/media/project-showroom-02.svg",
-        alt: "قاب‌های نمایش متحرک در فضای نمایشگاه",
-        ratio: "4/3",
-      },
-      {
-        src: "/media/project-showroom-03.svg",
-        alt: "سایهٔ بافت سنگ زیر نور با زاویهٔ کم",
-        ratio: "4/3",
-      },
-    ],
     layout: "tall",
     status: "published",
   },
@@ -258,22 +198,10 @@ export const products: Product[] = [
     ],
     tone: "#7E8C88",
     image: {
-      src: "/media/project-kelinik.svg",
+      src: "/media/project-kelinik.jpg",
       alt: "سالن انتظار مطب، صندلی‌ها رو به پنجره",
       ratio: "4/3",
     },
-    views: [
-      {
-        src: "/media/project-kelinik-02.svg",
-        alt: "درگاه اتاق درمان، محل رسیدن دو مسیر جدا",
-        ratio: "4/3",
-      },
-      {
-        src: "/media/project-kelinik-03.svg",
-        alt: "جدارهٔ بی‌درز تا ارتفاع یک‌ونیم متر",
-        ratio: "4/3",
-      },
-    ],
     layout: "wide",
     status: "published",
   },
@@ -299,22 +227,10 @@ export const products: Product[] = [
     ],
     tone: "#9E5B3E",
     image: {
-      src: "/media/project-kafe.svg",
+      src: "/media/project-kafe.jpg",
       alt: "جدارهٔ آجری بی‌پوشش کافه در امتداد میزهای بلند",
       ratio: "4/3",
     },
-    views: [
-      {
-        src: "/media/project-kafe-02.svg",
-        alt: "پیشخوان در میانهٔ طول مغازه",
-        ratio: "4/3",
-      },
-      {
-        src: "/media/project-kafe-03.svg",
-        alt: "میزهای پایین در انتهای فضا",
-        ratio: "4/3",
-      },
-    ],
     layout: "tall",
     status: "published",
   },
@@ -340,22 +256,10 @@ export const products: Product[] = [
     ],
     tone: "#A9704A",
     image: {
-      src: "/media/project-restoran.svg",
+      src: "/media/project-restoran.jpg",
       alt: "سالن رستوران با چراغ‌های پایین‌آمده بالای هر میز",
       ratio: "4/3",
     },
-    views: [
-      {
-        src: "/media/project-restoran-02.svg",
-        alt: "بازشوی نیمه‌باز آشپزخانه در ارتفاع چشم",
-        ratio: "4/3",
-      },
-      {
-        src: "/media/project-restoran-03.svg",
-        alt: "جزئیات مس و چوب روی پیشخوان",
-        ratio: "4/3",
-      },
-    ],
     layout: "compact",
     status: "published",
   },
@@ -380,22 +284,10 @@ export const products: Product[] = [
     ],
     tone: "#7C6A52",
     image: {
-      src: "/media/project-haiat.svg",
+      src: "/media/project-haiat.jpg",
       alt: "حیاط غذاخوری زیر سایه‌بان مستقل، کف آجر فرش",
       ratio: "16/9",
     },
-    views: [
-      {
-        src: "/media/project-haiat-02.svg",
-        alt: "فاصلهٔ ده سانتی میان سایه‌بان و دیوار قدیمی",
-        ratio: "16/9",
-      },
-      {
-        src: "/media/project-haiat-03.svg",
-        alt: "آجر فرش قدیمی حیاط با وصله‌های دست‌دوم",
-        ratio: "16/9",
-      },
-    ],
     layout: "feature",
     status: "published",
   },

@@ -44,12 +44,12 @@ export const hero: HeroContent = {
   secondary: { label: "دربارهٔ کرانه", href: "/#brand" },
   scrollHint: "پیمایش کنید",
   image: {
-    src: "/media/hero-main.svg",
+    src: "/media/hero-main.jpg",
     alt: "نشیمنی رو به حیاط در نور بعدازظهر، از پروژه‌های کرانه",
     ratio: "4/3",
   },
   inset: {
-    src: "/media/hero-inset.svg",
+    src: "/media/hero-inset.jpg",
     alt: "نمای نزدیک از اتصال چوب به جدارهٔ گچی",
     ratio: "1/1",
   },
@@ -130,7 +130,7 @@ export const brand: BrandContent = {
   heading: "روش کار ما",
   lead: "چهار اصلی که در هر پروژه، از بازدید اول تا تحویل، به آن برمی‌گردیم.",
   image: {
-    src: "/media/values-texture.svg",
+    src: "/media/values-texture.jpg",
     alt: "نمای نزدیک از جدارهٔ گچی و لبهٔ چوبی در یکی از پروژه‌ها",
     ratio: "3/4",
   },
@@ -208,7 +208,7 @@ export const about: AboutContent = {
     "بعد از آن، نقشه با اجراکننده بسته می‌شود نه بدون او. جزئیاتی که در کارگاه دوباره نوشته شود، از اول درست طراحی نشده بود.",
   ],
   image: {
-    src: "/media/gallery-04.svg",
+    src: "/media/gallery-04.jpg",
     alt: "ماکت و نقشه روی میز کار دفتر کرانه",
     ratio: "4/3",
   },

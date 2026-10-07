@@ -16,7 +16,7 @@ export const galleryItems: GalleryItem[] = [
     category: "جزئیات",
     caption: "خانهٔ دروازه",
     image: {
-      src: "/media/gallery-01.svg",
+      src: "/media/gallery-01.jpg",
       alt: "نمای نزدیک از اتصال قاب چوبی به جدارهٔ گچی",
       ratio: "4/3",
     },
@@ -27,7 +27,7 @@ export const galleryItems: GalleryItem[] = [
     title: "سایهٔ نیم‌روز",
     category: "نور",
     image: {
-      src: "/media/gallery-02.svg",
+      src: "/media/gallery-02.jpg",
       alt: "سایهٔ ستون روی کف در نور نیم‌روز",
       ratio: "4/3",
     },
@@ -39,7 +39,7 @@ export const galleryItems: GalleryItem[] = [
     category: "مصالح",
     caption: "کافهٔ آجر",
     image: {
-      src: "/media/gallery-03.svg",
+      src: "/media/gallery-03.jpg",
       alt: "بندکشی تازه میان آجرهای قدیمی",
       ratio: "4/3",
     },
@@ -50,7 +50,7 @@ export const galleryItems: GalleryItem[] = [
     title: "میز کار دفتر",
     category: "کارگاه",
     image: {
-      src: "/media/gallery-04.svg",
+      src: "/media/gallery-04.jpg",
       alt: "ماکت و نقشه روی میز کار دفتر",
       ratio: "4/3",
     },
@@ -62,7 +62,7 @@ export const galleryItems: GalleryItem[] = [
     category: "مصالح",
     caption: "نمایشگاه سنگ",
     image: {
-      src: "/media/gallery-05.svg",
+      src: "/media/gallery-05.jpg",
       alt: "نمونهٔ سنگ کنار نمونهٔ چوب روی کف بتنی",
       ratio: "4/3",
     },
@@ -73,7 +73,7 @@ export const galleryItems: GalleryItem[] = [
     title: "پلهٔ نیم‌طبقه",
     category: "جزئیات",
     image: {
-      src: "/media/gallery-06.svg",
+      src: "/media/gallery-06.jpg",
       alt: "پاخور پلهٔ نیم‌طبقه و لبهٔ فلزی آن",
       ratio: "4/3",
     },
@@ -85,7 +85,7 @@ export const galleryItems: GalleryItem[] = [
     category: "نور",
     caption: "بازسازی بام",
     image: {
-      src: "/media/gallery-07.svg",
+      src: "/media/gallery-07.jpg",
       alt: "ستون نور پنجرهٔ سقفی روی کف چوبی",
       ratio: "4/3",
     },
@@ -96,7 +96,7 @@ export const galleryItems: GalleryItem[] = [
     title: "ماکت کارگاهی",
     category: "کارگاه",
     image: {
-      src: "/media/gallery-08.svg",
+      src: "/media/gallery-08.jpg",
       alt: "ماکت مقوایی یک پلان در نور میز کار",
       ratio: "4/3",
     },

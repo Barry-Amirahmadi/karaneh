@@ -1,4 +1,13 @@
 import { test, expect, type Page } from "@playwright/test";
+import { products } from "../src/content/products";
+
+/**
+ * Pass-2 views are hidden: the content carries no `views` until their
+ * photographs exist, so the view-strip test below has nothing to exercise.
+ * It is guarded rather than deleted, and runs again by itself the day the
+ * views are restored to `src/content/products.ts`.
+ */
+const anyViews = products.some((p) => (p.views?.length ?? 0) > 0);
 
 /**
  * Smoke pass — deliberately small.
@@ -184,6 +193,7 @@ test("a project route survives a hard load under the base path", async ({ page }
  * plainly not the first. Both are invisible unless something counts.
  */
 test("a project's extra views open the frame their label names", async ({ page }) => {
+  test.skip(!anyViews, "views are hidden until the pass-2 photographs exist");
   const { consoleErrors, failed } = watch(page);
 
   await page.goto(`${BASE}/products/darvazeh/`);
