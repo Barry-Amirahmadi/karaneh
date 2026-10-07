@@ -182,6 +182,15 @@
   .on-dark .t-body {
     color: var(--color-noor-2);
   }
+  /* The closing band's lead is the one paragraph on the site set over a
+     picture. In noor-2 its contrast against the brightest pixel under it
+     measured as low as 3.83:1 at 360px, where the copy spans the band and
+     reaches the side the scrim leaves thin. In the heading's own ink it
+     measured at least 6.40:1 at every width from 360 to 1920px; the picture
+     keeps its scrim as it was. */
+  #cta .t-lead {
+    color: var(--color-noor);
+  }
   .on-dark .t-meta,
   .on-dark .t-label {
     color: var(--color-noor-2);
